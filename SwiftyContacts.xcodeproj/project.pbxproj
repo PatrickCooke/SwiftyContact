@@ -16,6 +16,7 @@
 		43171E851CE23EA80034021F /* Contact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43171E831CE23EA80034021F /* Contact+CoreDataProperties.swift */; };
 		43171E861CE23EA80034021F /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43171E841CE23EA80034021F /* Contact.swift */; };
 		43171E881CE244C30034021F /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43171E871CE244C30034021F /* DetailsViewController.swift */; };
+		43171E8A1CE266140034021F /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43171E891CE266140034021F /* CustomCellTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		43171E831CE23EA80034021F /* Contact+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		43171E841CE23EA80034021F /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		43171E871CE244C30034021F /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
+		43171E891CE266140034021F /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				43171E6E1CE23C900034021F /* AppDelegate.swift */,
 				43171E701CE23C900034021F /* ViewController.swift */,
 				43171E871CE244C30034021F /* DetailsViewController.swift */,
+				43171E891CE266140034021F /* CustomCellTableViewCell.swift */,
 				43171E721CE23C900034021F /* Main.storyboard */,
 				43171E781CE23C900034021F /* Assets.xcassets */,
 				43171E7A1CE23C900034021F /* LaunchScreen.storyboard */,
@@ -151,6 +154,7 @@
 				43171E851CE23EA80034021F /* Contact+CoreDataProperties.swift in Sources */,
 				43171E711CE23C900034021F /* ViewController.swift in Sources */,
 				43171E861CE23EA80034021F /* Contact.swift in Sources */,
+				43171E8A1CE266140034021F /* CustomCellTableViewCell.swift in Sources */,
 				43171E6F1CE23C900034021F /* AppDelegate.swift in Sources */,
 				43171E771CE23C900034021F /* SwiftyContacts.xcdatamodeld in Sources */,
 				43171E881CE244C30034021F /* DetailsViewController.swift in Sources */,

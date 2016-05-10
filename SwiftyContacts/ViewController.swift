@@ -37,13 +37,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return contactArray.count
     }
-    
+    /*
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView .dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
         let currentContact = contactArray[indexPath.row]
         cell.textLabel?.text = "\(currentContact.lastName!), \(currentContact.firstName!) "
         cell.detailTextLabel?.text = "\(currentContact.emailAddress!)"
         return cell
+    }
+    */
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView .dequeueReusableCellWithIdentifier("Cell2", forIndexPath: indexPath) as! CustomCellTableViewCell
+        let currentContact = contactArray[indexPath.row]
+        cell.nameLabel!.text = "\(currentContact.lastName!), \(currentContact.firstName!) "
+        cell.emailLabel!.text = currentContact.emailAddress!
+        cell.phoneLabel!.text = currentContact.phoneNumber!
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 100.0
     }
     
     func refreshTableData() {

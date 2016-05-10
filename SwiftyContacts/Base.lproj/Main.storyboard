@@ -46,8 +46,60 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell2" rowHeight="100" id="LwS-S2-c9c" customClass="CustomCellTableViewCell" customModule="SwiftyContacts" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="136" width="600" height="100"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LwS-S2-c9c" id="jSC-RV-Jbz">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="99.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EXB-DY-zXt">
+                                                    <rect key="frame" x="8" y="0.0" width="584" height="28"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="28" id="8XB-m8-iDm"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="21"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Phone" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a2g-LZ-wx7">
+                                                    <rect key="frame" x="8" y="70" width="584" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="Ys9-X8-bft"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I4Q-6d-qxP">
+                                                    <rect key="frame" x="8" y="36" width="584" height="26"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="26" id="h1G-cC-DkT"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="16"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="leadingMargin" secondItem="a2g-LZ-wx7" secondAttribute="leading" id="3xJ-WU-jPT"/>
+                                                <constraint firstItem="I4Q-6d-qxP" firstAttribute="top" secondItem="EXB-DY-zXt" secondAttribute="bottom" constant="8" id="HeA-oJ-9Bq"/>
+                                                <constraint firstItem="a2g-LZ-wx7" firstAttribute="top" secondItem="I4Q-6d-qxP" secondAttribute="bottom" constant="8" id="HsK-sT-KxM"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="a2g-LZ-wx7" secondAttribute="trailing" id="NAN-yh-a5f"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="EXB-DY-zXt" secondAttribute="trailing" constant="8" id="JxV-Wy-VqU"/>
+                                            <constraint firstItem="EXB-DY-zXt" firstAttribute="top" secondItem="LwS-S2-c9c" secondAttribute="top" id="cto-Q7-KoC"/>
+                                            <constraint firstItem="I4Q-6d-qxP" firstAttribute="leading" secondItem="LwS-S2-c9c" secondAttribute="leading" constant="8" id="vCL-ap-pCE"/>
+                                            <constraint firstItem="EXB-DY-zXt" firstAttribute="leading" secondItem="LwS-S2-c9c" secondAttribute="leading" constant="8" id="vdo-Gb-Ulw"/>
+                                            <constraint firstAttribute="trailing" secondItem="I4Q-6d-qxP" secondAttribute="trailing" constant="8" id="xUT-N9-JxB"/>
+                                        </constraints>
                                         <connections>
-                                            <segue destination="7l3-c8-s7D" kind="show" identifier="seeSelectedContact" id="l9k-Fx-IwQ"/>
+                                            <outlet property="emailLabel" destination="I4Q-6d-qxP" id="Esc-QD-WkC"/>
+                                            <outlet property="nameLabel" destination="EXB-DY-zXt" id="DEX-AU-tAb"/>
+                                            <outlet property="phoneLabel" destination="a2g-LZ-wx7" id="Nsu-pG-oOv"/>
+                                            <segue destination="7l3-c8-s7D" kind="show" identifier="seeSelectedContact" id="3Zb-sh-mUr"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -337,6 +389,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="l9k-Fx-IwQ"/>
+        <segue reference="3Zb-sh-mUr"/>
     </inferredMetricsTieBreakers>
 </document>
