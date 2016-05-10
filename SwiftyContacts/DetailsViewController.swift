@@ -51,7 +51,18 @@ class DetailsViewController: UIViewController {
         self.saveAndPop()
     }
     
+    //MARk: - Data Validation Methods
     
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        let aSet = NSCharacterSet(charactersInString:"0123456789").invertedSet
+        let compSepByCharInSet = string.componentsSeparatedByCharactersInSet(aSet)
+        let numberFiltered = compSepByCharInSet.joinWithSeparator("")        
+        return string == numberFiltered
+    
+        
+    }
+
     
     //MARK: -  Life Cycle Methods
     override func viewDidLoad() {
