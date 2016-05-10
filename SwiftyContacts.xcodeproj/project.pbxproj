@@ -13,6 +13,9 @@
 		43171E771CE23C900034021F /* SwiftyContacts.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 43171E751CE23C900034021F /* SwiftyContacts.xcdatamodeld */; };
 		43171E791CE23C900034021F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43171E781CE23C900034021F /* Assets.xcassets */; };
 		43171E7C1CE23C900034021F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43171E7A1CE23C900034021F /* LaunchScreen.storyboard */; };
+		43171E851CE23EA80034021F /* Contact+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43171E831CE23EA80034021F /* Contact+CoreDataProperties.swift */; };
+		43171E861CE23EA80034021F /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43171E841CE23EA80034021F /* Contact.swift */; };
+		43171E881CE244C30034021F /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43171E871CE244C30034021F /* DetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,9 @@
 		43171E781CE23C900034021F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		43171E7B1CE23C900034021F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		43171E7D1CE23C900034021F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43171E831CE23EA80034021F /* Contact+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Contact+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		43171E841CE23EA80034021F /* Contact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		43171E871CE244C30034021F /* DetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,11 +64,14 @@
 			children = (
 				43171E6E1CE23C900034021F /* AppDelegate.swift */,
 				43171E701CE23C900034021F /* ViewController.swift */,
+				43171E871CE244C30034021F /* DetailsViewController.swift */,
 				43171E721CE23C900034021F /* Main.storyboard */,
 				43171E781CE23C900034021F /* Assets.xcassets */,
 				43171E7A1CE23C900034021F /* LaunchScreen.storyboard */,
 				43171E7D1CE23C900034021F /* Info.plist */,
 				43171E751CE23C900034021F /* SwiftyContacts.xcdatamodeld */,
+				43171E831CE23EA80034021F /* Contact+CoreDataProperties.swift */,
+				43171E841CE23EA80034021F /* Contact.swift */,
 			);
 			path = SwiftyContacts;
 			sourceTree = "<group>";
@@ -139,9 +148,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43171E851CE23EA80034021F /* Contact+CoreDataProperties.swift in Sources */,
 				43171E711CE23C900034021F /* ViewController.swift in Sources */,
+				43171E861CE23EA80034021F /* Contact.swift in Sources */,
 				43171E6F1CE23C900034021F /* AppDelegate.swift in Sources */,
 				43171E771CE23C900034021F /* SwiftyContacts.xcdatamodeld in Sources */,
+				43171E881CE244C30034021F /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
