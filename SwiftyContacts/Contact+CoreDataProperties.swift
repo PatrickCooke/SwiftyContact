@@ -19,9 +19,10 @@ extension Contact {
     @NSManaged var firstName: String?
     @NSManaged var lastName: String?
     @NSManaged var phoneNumber: String?
+    @NSManaged var rating: NSNumber?
     @NSManaged var stateAddress: String?
     @NSManaged var streetAddress: String?
     @NSManaged var zipAddress: String?
-    @NSManaged var rating: NSNumber?
+    @NSManaged var contactIdentifer: String?
 
 }

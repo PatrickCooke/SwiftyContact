@@ -48,42 +48,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             newlistcontact.phoneNumber = phone
         }
         newlistcontact.rating = 0
+        newlistcontact.contactIdentifer = contact.identifier
         appDelegate.saveContext()
     }
-    
-//    @IBAction private func showContactEditor(sender: UIBarButtonItem){
-//        print("Show Editor")
-//        if let lastName = lastNameTxtField.text {
-//            presentContactMatchingName(lastName)
-//        }
-//    }
-//    
-//    private func presentContactMatchingName(name: String){
-//        let predicate = CNContact.predicateForContactsMatchingName(name)
-//        let keysToFetch = [CNContactViewController.descriptorForRequiredKeys()]
-//        do {
-//            let contacts = try contactStore.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
-//            if let firstContact = contacts.first {
-//                print("Contant: " + firstContact.givenName)
-//                displayContact(firstContact)
-//            }
-//        } catch {
-//            print("error")
-//        }
-//    }
-//    
-//    private func displayContact(contact: CNContact) {
-//        let contactVC = CNContactViewController(forContact: contact)
-//        contactVC.contactStore = contactStore
-//        contactVC.delegate = self
-//        navigationController!.pushViewController(contactVC, animated: true)
-//    }
-//    
-//    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?) {
-//        print("Done with: \(contact!.familyName)")
-//    }
-
-    
     
     //MARK: - Interactivty Methods
     
@@ -157,6 +124,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         newcontact1.zipAddress = "48304"
         newcontact1.phoneNumber = "2488774949"
         newcontact1.rating = 3
+        newcontact1.contactIdentifer = ""
         
         let newcontact2 = Contact(entity: entityDescription, insertIntoManagedObjectContext: managedObjectContext)
         newcontact2.lastName = "Zeffer"
@@ -168,6 +136,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         newcontact2.zipAddress = "77777"
         newcontact2.phoneNumber = "6785551234"
         newcontact2.rating = 7
+        newcontact2.contactIdentifer = ""
         
         appDelegate.saveContext()
     }

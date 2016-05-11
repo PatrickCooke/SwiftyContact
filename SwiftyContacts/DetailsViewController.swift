@@ -33,13 +33,13 @@ class DetailsViewController: UIViewController, CNContactViewControllerDelegate {
     
     @IBAction private func showContactEditor(sender: UIBarButtonItem){
         print("Show Editor")
-        if let lastName = lastNameTxtField.text {
-            presentContactMatchingName(lastName)
+        if let identifier = selectedContact?.contactIdentifer {
+            presentContactMatchingidentifier(identifier)
         }
     }
     
-    private func presentContactMatchingName(name: String){
-        let predicate = CNContact.predicateForContactsMatchingName(name)
+    private func presentContactMatchingidentifier(identifier: String){
+        let predicate = CNContact.predicateForContactsWithIdentifiers([identifier])
         let keysToFetch = [CNContactViewController.descriptorForRequiredKeys()]
         do {
             let contacts = try contactStore.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
@@ -76,6 +76,7 @@ class DetailsViewController: UIViewController, CNContactViewControllerDelegate {
             selectedContact!.phoneNumber = phone
         }
         selectedContact!.rating = 0
+        selectedContact!.contactIdentifer = contact!.identifier
         appDelegate.saveContext()
         reloadDetailScreen()
     }
@@ -192,6 +193,7 @@ class DetailsViewController: UIViewController, CNContactViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         reloadDetailScreen()
+        print(selectedContact?.contactIdentifer)
     }
 
     override func viewWillDisappear(animated: Bool) {
