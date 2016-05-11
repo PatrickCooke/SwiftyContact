@@ -23,6 +23,8 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var cityTxtField: UITextField!
     @IBOutlet weak var stateTxtField: UITextField!
     @IBOutlet weak var zipTxtField: UITextField!
+    @IBOutlet weak var ratingStackView: UIStackView!
+    var starRating = 0 as Int
     
     
     //MARK: - Interactivity Methods
@@ -42,6 +44,11 @@ class DetailsViewController: UIViewController {
             selContact.cityAddress = cityTxtField.text
             selContact.stateAddress = stateTxtField.text
             selContact.zipAddress = zipTxtField.text
+            if ratingStackView.arrangedSubviews.count > 1 {
+                selContact.rating = ratingStackView.arrangedSubviews.count - 1
+            } else {
+                selContact.rating = 0
+            }
             self.saveAndPop()
         }
     }
@@ -50,6 +57,36 @@ class DetailsViewController: UIViewController {
         if let selContact = selectedContact{
             managedObjectContext.deleteObject(selContact)
             self.saveAndPop()
+        }
+    }
+    
+    private func addStar() {
+        let starImageView = UIImageView(image: UIImage(named: "IconStar"))
+        starImageView.contentMode = .ScaleAspectFit
+        let starcount = ratingStackView.arrangedSubviews.count
+        if starcount < 10{
+            ratingStackView.insertArrangedSubview(starImageView, atIndex: starcount - 1)
+            UIView.animateWithDuration(0.25) { () -> Void in
+                self.ratingStackView.layoutIfNeeded()
+            }
+        }
+    }
+    
+    @IBAction private func addButtonPressed(sender: UIButton){
+        print("add")
+        addStar()
+    }
+    
+    @IBAction private func removedButtonPressed(sender: UIButton){
+        print("remove")
+        let starCount = ratingStackView.arrangedSubviews.count
+        if starCount > 1 {
+            let starToRemove = ratingStackView.arrangedSubviews[starCount - 2]
+            ratingStackView.removeArrangedSubview(starToRemove)
+            starToRemove.removeFromSuperview()
+            UIView.animateWithDuration(0.25) { () -> Void in
+                self.ratingStackView.layoutIfNeeded()
+            }
         }
     }
     
@@ -81,6 +118,13 @@ class DetailsViewController: UIViewController {
             cityTxtField.text = selContact.cityAddress
             stateTxtField.text = selContact.stateAddress
             zipTxtField.text = selContact.zipAddress
+            if let rating = selContact.rating?.intValue {
+                for _ in 0..<rating {
+                    addStar()
+                }
+            }
+        
+            
         } else {
             let entityDescription = NSEntityDescription.entityForName("Contact", inManagedObjectContext: managedObjectContext)!
             selectedContact = Contact(entity: entityDescription, insertIntoManagedObjectContext: managedObjectContext)
@@ -93,6 +137,7 @@ class DetailsViewController: UIViewController {
             cityTxtField.text = ""
             stateTxtField.text = ""
             zipTxtField.text = ""
+
         }
     }
 

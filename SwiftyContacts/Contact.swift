@@ -2,7 +2,7 @@
 //  Contact.swift
 //  SwiftyContacts
 //
-//  Created by Patrick Cooke on 5/10/16.
+//  Created by Patrick Cooke on 5/11/16.
 //  Copyright © 2016 Patrick Cooke. All rights reserved.
 //
 

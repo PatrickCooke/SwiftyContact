@@ -8,14 +8,82 @@
 
 import UIKit
 import CoreData
+import Contacts
+import ContactsUI
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate {
 
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
     var contactArray = [Contact]()
-    @IBOutlet weak var contactTableView: UITableView!
+    @IBOutlet private weak var contactTableView: UITableView!
+    @IBOutlet private weak var lastNameTxtField:UITextField!
+    var contactStore = CNContactStore()
 
+    //MARK: - ContactPicker Methods
+    
+    @IBAction private func showContactList(sender: UIBarButtonItem){
+        print("Show Contact List")
+        let contactListVC = CNContactPickerViewController()
+        contactListVC.delegate = self
+        presentViewController(contactListVC, animated: true, completion: nil)
+    }
+    
+    func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
+        let entityDescription = NSEntityDescription.entityForName("Contact", inManagedObjectContext: managedObjectContext)!
+        let newlistcontact = Contact(entity: entityDescription, insertIntoManagedObjectContext: managedObjectContext)
+        newlistcontact.lastName = contact.familyName
+        newlistcontact.firstName = contact.givenName
+        if let email = contact.emailAddresses.first?.value as? String {
+            newlistcontact.emailAddress = email
+        }
+        if let address = contact.postalAddresses.first {
+            let addressValue = address.value as! CNPostalAddress
+            newlistcontact.streetAddress = addressValue.street
+            newlistcontact.cityAddress = addressValue.city
+            newlistcontact.stateAddress = addressValue.state
+            newlistcontact.zipAddress = addressValue.postalCode
+        }
+        if let phone = contact.phoneNumbers.first?.value as? String {
+            newlistcontact.phoneNumber = phone
+        }
+        newlistcontact.rating = 0
+        appDelegate.saveContext()
+    }
+    
+    @IBAction private func showContactEditor(sender: UIBarButtonItem){
+        print("Show Editor")
+        if let lastName = lastNameTxtField.text {
+            presentContactMatchingName(lastName)
+        }
+    }
+    
+    private func presentContactMatchingName(name: String){
+        let predicate = CNContact.predicateForContactsMatchingName(name)
+        let keysToFetch = [CNContactViewController.descriptorForRequiredKeys()]
+        do {
+            let contacts = try contactStore.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
+            if let firstContact = contacts.first {
+                print("Contant: " + firstContact.givenName)
+                displayContact(firstContact)
+            }
+        } catch {
+            print("error")
+        }
+    }
+    
+    private func displayContact(contact: CNContact) {
+        let contactVC = CNContactViewController(forContact: contact)
+        contactVC.contactStore = contactStore
+        contactVC.delegate = self
+        navigationController!.pushViewController(contactVC, animated: true)
+    }
+    
+    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?) {
+        print("Done with: \(contact!.familyName)")
+    }
+
+    
     
     //MARK: - Interactivty Methods
     
@@ -37,6 +105,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return contactArray.count
     }
+    
     /*
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView .dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
@@ -46,12 +115,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     */
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView .dequeueReusableCellWithIdentifier("Cell2", forIndexPath: indexPath) as! CustomCellTableViewCell
         let currentContact = contactArray[indexPath.row]
         cell.nameLabel.text = "\(currentContact.lastName!), \(currentContact.firstName!) "
-        cell.emailLabel.text = currentContact.emailAddress!
-        cell.phoneLabel.text = currentContact.phoneNumber!
+        if let email = currentContact.emailAddress {
+            cell.emailLabel.text = email
+        } else {
+            cell.emailLabel.text = ""
+        }
+        if let phone = currentContact.phoneNumber {
+            cell.phoneLabel.text = phone
+        } else {
+            cell.phoneLabel.text = ""
+        }
         return cell
     }
     
@@ -78,6 +156,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         newcontact1.stateAddress = "MI"
         newcontact1.zipAddress = "48304"
         newcontact1.phoneNumber = "2488774949"
+        newcontact1.rating = 3
         
         let newcontact2 = Contact(entity: entityDescription, insertIntoManagedObjectContext: managedObjectContext)
         newcontact2.lastName = "Zeffer"
@@ -88,6 +167,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         newcontact2.stateAddress = "CA"
         newcontact2.zipAddress = "77777"
         newcontact2.phoneNumber = "6785551234"
+        newcontact2.rating = 7
         
         appDelegate.saveContext()
     }
@@ -103,12 +183,37 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
 
+    //MARK: - Contact Access Verification methods
+    
+    private func requestAccessToContactType(type: CNEntityType) {
+        contactStore.requestAccessForEntityType(type) { (accessGranted: Bool, error: NSError?) -> Void in
+            if accessGranted {
+                print("Granted")
+            } else {
+                print("Not Granted")
+            }
+        }
+    }
+    
+    private func checkContactAuthorizationStatus(type: CNEntityType) {
+        let status = CNContactStore.authorizationStatusForEntityType(type)
+        switch status {
+        case .NotDetermined:
+            print("Not Determined")
+            requestAccessToContactType(type)
+        case .Authorized:
+            print("Authorized")
+        case.Restricted, .Denied:
+            print("Restricted/Denied")
+        }
+    }
     
     //MARK: - Life Cycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //tempAddRecords()
+        checkContactAuthorizationStatus(.Contacts)
     }
 
     override func viewWillAppear(animated: Bool) {
