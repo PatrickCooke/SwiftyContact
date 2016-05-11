@@ -51,37 +51,37 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         appDelegate.saveContext()
     }
     
-    @IBAction private func showContactEditor(sender: UIBarButtonItem){
-        print("Show Editor")
-        if let lastName = lastNameTxtField.text {
-            presentContactMatchingName(lastName)
-        }
-    }
-    
-    private func presentContactMatchingName(name: String){
-        let predicate = CNContact.predicateForContactsMatchingName(name)
-        let keysToFetch = [CNContactViewController.descriptorForRequiredKeys()]
-        do {
-            let contacts = try contactStore.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
-            if let firstContact = contacts.first {
-                print("Contant: " + firstContact.givenName)
-                displayContact(firstContact)
-            }
-        } catch {
-            print("error")
-        }
-    }
-    
-    private func displayContact(contact: CNContact) {
-        let contactVC = CNContactViewController(forContact: contact)
-        contactVC.contactStore = contactStore
-        contactVC.delegate = self
-        navigationController!.pushViewController(contactVC, animated: true)
-    }
-    
-    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?) {
-        print("Done with: \(contact!.familyName)")
-    }
+//    @IBAction private func showContactEditor(sender: UIBarButtonItem){
+//        print("Show Editor")
+//        if let lastName = lastNameTxtField.text {
+//            presentContactMatchingName(lastName)
+//        }
+//    }
+//    
+//    private func presentContactMatchingName(name: String){
+//        let predicate = CNContact.predicateForContactsMatchingName(name)
+//        let keysToFetch = [CNContactViewController.descriptorForRequiredKeys()]
+//        do {
+//            let contacts = try contactStore.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
+//            if let firstContact = contacts.first {
+//                print("Contant: " + firstContact.givenName)
+//                displayContact(firstContact)
+//            }
+//        } catch {
+//            print("error")
+//        }
+//    }
+//    
+//    private func displayContact(contact: CNContact) {
+//        let contactVC = CNContactViewController(forContact: contact)
+//        contactVC.contactStore = contactStore
+//        contactVC.delegate = self
+//        navigationController!.pushViewController(contactVC, animated: true)
+//    }
+//    
+//    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?) {
+//        print("Done with: \(contact!.familyName)")
+//    }
 
     
     

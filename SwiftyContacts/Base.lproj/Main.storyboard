@@ -140,11 +140,6 @@
                                     <action selector="showContactList:" destination="BYZ-38-t0r" id="eEi-g2-IBN"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem systemItem="search" id="7NO-y5-myM">
-                                <connections>
-                                    <action selector="showContactEditor:" destination="BYZ-38-t0r" id="Keg-aB-vpQ"/>
-                                </connections>
-                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
@@ -317,7 +312,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RPl-Mi-Xh2">
                                 <rect key="frame" x="20" y="434" width="560" height="40"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mUA-oN-lxw">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mUA-oN-lxw">
                                         <rect key="frame" x="0.0" y="0.0" width="560" height="40"/>
                                     </imageView>
                                 </subviews>
@@ -416,6 +411,11 @@
                             <barButtonItem systemItem="trash" id="cxH-7m-rZw">
                                 <connections>
                                     <action selector="deletebutton:" destination="7l3-c8-s7D" id="gQ3-uZ-E21"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="search" id="8Pp-XZ-YWG">
+                                <connections>
+                                    <action selector="showContactEditor:" destination="7l3-c8-s7D" id="tyy-tr-ejH"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>

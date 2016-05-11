@@ -8,8 +8,10 @@
 
 import UIKit
 import CoreData
+import Contacts
+import ContactsUI
 
-class DetailsViewController: UIViewController {
+class DetailsViewController: UIViewController, CNContactViewControllerDelegate {
 
     var selectedContact :Contact?
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -25,7 +27,59 @@ class DetailsViewController: UIViewController {
     @IBOutlet weak var zipTxtField: UITextField!
     @IBOutlet weak var ratingStackView: UIStackView!
     var starRating = 0 as Int
+    var contactStore = CNContactStore()
     
+    //MARK: - Contact List Search
+    
+    @IBAction private func showContactEditor(sender: UIBarButtonItem){
+        print("Show Editor")
+        if let lastName = lastNameTxtField.text {
+            presentContactMatchingName(lastName)
+        }
+    }
+    
+    private func presentContactMatchingName(name: String){
+        let predicate = CNContact.predicateForContactsMatchingName(name)
+        let keysToFetch = [CNContactViewController.descriptorForRequiredKeys()]
+        do {
+            let contacts = try contactStore.unifiedContactsMatchingPredicate(predicate, keysToFetch: keysToFetch)
+            if let firstContact = contacts.first {
+                print("Contant: " + firstContact.givenName)
+                displayContact(firstContact)
+            }
+        } catch {
+            print("error")
+        }
+    }
+    private func displayContact(contact: CNContact) {
+        let contactVC = CNContactViewController(forContact: contact)
+        contactVC.contactStore = contactStore
+        contactVC.delegate = self
+        navigationController!.pushViewController(contactVC, animated: true)
+    }
+    
+    func contactViewController(viewController: CNContactViewController, didCompleteWithContact contact: CNContact?) {
+        print("Done with: \(contact!.familyName)")
+        selectedContact!.lastName = contact!.familyName
+        selectedContact!.firstName = contact!.givenName
+        if let email = contact!.emailAddresses.first?.value as? String {
+            selectedContact!.emailAddress = email
+        }
+        if let address = contact!.postalAddresses.first {
+            let addressValue = address.value as! CNPostalAddress
+            selectedContact!.streetAddress = addressValue.street
+            selectedContact!.cityAddress = addressValue.city
+            selectedContact!.stateAddress = addressValue.state
+            selectedContact!.zipAddress = addressValue.postalCode
+        }
+        if let phone = contact!.phoneNumbers.first?.value as? String {
+            selectedContact!.phoneNumber = phone
+        }
+        selectedContact!.rating = 0
+        appDelegate.saveContext()
+        reloadDetailScreen()
+    }
+
     
     //MARK: - Interactivity Methods
    
@@ -90,24 +144,7 @@ class DetailsViewController: UIViewController {
         }
     }
     
-    //MARk: - Data Validation Methods
-    
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        if textField == phoneTxtField {
-            let aSet = NSCharacterSet(charactersInString:"0123456789").invertedSet
-            let compSepByCharInSet = string.componentsSeparatedByCharactersInSet(aSet)
-            let numberFiltered = compSepByCharInSet.joinWithSeparator("")
-            return string == numberFiltered
-        }
-        return true
-    }
-        
-    
-
-    
-    //MARK: -  Life Cycle Methods
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private func reloadDetailScreen () {
         if let selContact = selectedContact {
             nameLabel.text = selContact.firstName! + " " + selContact.lastName!
             firstNameTxtField.text = selContact.firstName!
@@ -123,8 +160,6 @@ class DetailsViewController: UIViewController {
                     addStar()
                 }
             }
-        
-            
         } else {
             let entityDescription = NSEntityDescription.entityForName("Contact", inManagedObjectContext: managedObjectContext)!
             selectedContact = Contact(entity: entityDescription, insertIntoManagedObjectContext: managedObjectContext)
@@ -137,8 +172,26 @@ class DetailsViewController: UIViewController {
             cityTxtField.text = ""
             stateTxtField.text = ""
             zipTxtField.text = ""
-
+            
         }
+    }
+    
+    //MARk: - Data Validation Methods
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if textField == phoneTxtField {
+            let aSet = NSCharacterSet(charactersInString:"0123456789").invertedSet
+            let compSepByCharInSet = string.componentsSeparatedByCharactersInSet(aSet)
+            let numberFiltered = compSepByCharInSet.joinWithSeparator("")
+            return string == numberFiltered
+        }
+        return true
+    }
+    
+    //MARK: -  Life Cycle Methods
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        reloadDetailScreen()
     }
 
     override func viewWillDisappear(animated: Bool) {
