@@ -44,9 +44,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             newlistcontact.stateAddress = addressValue.state
             newlistcontact.zipAddress = addressValue.postalCode
         }
-        if let phone = contact.phoneNumbers.first?.value as? String {
-            newlistcontact.phoneNumber = phone
+        if let phone = contact.phoneNumbers.first?.value as? CNPhoneNumber {
+            newlistcontact.phoneNumber = phone.stringValue
         }
+        
+        
         newlistcontact.rating = 0
         newlistcontact.contactIdentifer = contact.identifier
         appDelegate.saveContext()

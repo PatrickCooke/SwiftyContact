@@ -72,8 +72,8 @@ class DetailsViewController: UIViewController, CNContactViewControllerDelegate {
             selectedContact!.stateAddress = addressValue.state
             selectedContact!.zipAddress = addressValue.postalCode
         }
-        if let phone = contact!.phoneNumbers.first?.value as? String {
-            selectedContact!.phoneNumber = phone
+        if let phone = contact!.phoneNumbers.first?.value as? CNPhoneNumber {
+            selectedContact!.phoneNumber = phone.stringValue
         }
         selectedContact!.rating = 0
         selectedContact!.contactIdentifer = contact!.identifier
