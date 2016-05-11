@@ -22,10 +22,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let destController = segue.destinationViewController as! DetailsViewController
         if segue.identifier == "seeSelectedContact" {
-            let indexPath = contactTableView.indexPathForSelectedRow
-            let selectedContact = contactArray[indexPath!.row]
+            let indexPath = contactTableView.indexPathForSelectedRow!
+            let selectedContact = contactArray[indexPath.row]
             destController.selectedContact = selectedContact
-            contactTableView.deselectRowAtIndexPath(indexPath!, animated: true)
+            contactTableView.deselectRowAtIndexPath(indexPath, animated: true)
         } else if segue.identifier == "addNewContact" {
             destController.selectedContact = nil
         }
@@ -49,9 +49,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView .dequeueReusableCellWithIdentifier("Cell2", forIndexPath: indexPath) as! CustomCellTableViewCell
         let currentContact = contactArray[indexPath.row]
-        cell.nameLabel!.text = "\(currentContact.lastName!), \(currentContact.firstName!) "
-        cell.emailLabel!.text = currentContact.emailAddress!
-        cell.phoneLabel!.text = currentContact.phoneNumber!
+        cell.nameLabel.text = "\(currentContact.lastName!), \(currentContact.firstName!) "
+        cell.emailLabel.text = currentContact.emailAddress!
+        cell.phoneLabel.text = currentContact.phoneNumber!
         return cell
     }
     
@@ -117,6 +117,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print("Count : \(contactArray.count)")
         self.refreshTableData()
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

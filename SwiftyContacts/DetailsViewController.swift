@@ -29,7 +29,7 @@ class DetailsViewController: UIViewController {
    
     func saveAndPop() {
         appDelegate.saveContext()
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController!.popViewControllerAnimated(true)
     }
     
     @IBAction func saveButton(sender: UIBarButtonItem) {
@@ -47,21 +47,25 @@ class DetailsViewController: UIViewController {
     }
     
     @IBAction func deletebutton(sender: UIBarButtonItem) {
-        managedObjectContext.deleteObject(selectedContact!)
-        self.saveAndPop()
+        if let selContact = selectedContact{
+            managedObjectContext.deleteObject(selContact)
+            self.saveAndPop()
+        }
     }
     
     //MARk: - Data Validation Methods
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        
-        let aSet = NSCharacterSet(charactersInString:"0123456789").invertedSet
-        let compSepByCharInSet = string.componentsSeparatedByCharactersInSet(aSet)
-        let numberFiltered = compSepByCharInSet.joinWithSeparator("")        
-        return string == numberFiltered
-    
-        
+        if textField == phoneTxtField {
+            let aSet = NSCharacterSet(charactersInString:"0123456789").invertedSet
+            let compSepByCharInSet = string.componentsSeparatedByCharactersInSet(aSet)
+            let numberFiltered = compSepByCharInSet.joinWithSeparator("")
+            return string == numberFiltered
+        }
+        return true
     }
+        
+    
 
     
     //MARK: -  Life Cycle Methods
@@ -94,7 +98,7 @@ class DetailsViewController: UIViewController {
 
     override func viewWillDisappear(animated: Bool) {
         if (managedObjectContext .hasChanges) {
-            managedObjectContext .rollback();
+            managedObjectContext .rollback()
         }
     }
     
