@@ -19,6 +19,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet private weak var contactTableView: UITableView!
     @IBOutlet private weak var lastNameTxtField:UITextField!
     var contactStore = CNContactStore()
+    var indexArray = [String]()
 
     //MARK: - ContactPicker Methods
     
@@ -60,8 +61,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let destController = segue.destinationViewController as! DetailsViewController
         if segue.identifier == "seeSelectedContact" {
             let indexPath = contactTableView.indexPathForSelectedRow!
-            let selectedContact = contactArray[indexPath.row]
-            destController.selectedContact = selectedContact
+            //let selectedContact = contactArray[indexPath.section]
+            let selectedContact = filterArrayForSection(contactArray, section: indexPath.section)
+            destController.selectedContact = selectedContact[indexPath.row]
             contactTableView.deselectRowAtIndexPath(indexPath, animated: true)
         } else if segue.identifier == "addNewContact" {
             destController.selectedContact = nil
@@ -71,24 +73,39 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     //MARK: - TableView Methods
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return contactArray.count
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return indexArray.count
     }
     
-    /*
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filterArrayForSection(contactArray, section: section).count
+        //return contactArray.count
+    }
+    
+   /*
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView .dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        let currentContact = contactArray[indexPath.row]
+//        let currentContact = contactArray[indexPath.row]
+        let sectionArray = filterArrayForSection(contactArray, section: indexPath.section)
+        let currentContact = sectionArray[indexPath.row]
         cell.textLabel?.text = "\(currentContact.lastName!), \(currentContact.firstName!) "
         cell.detailTextLabel?.text = "\(currentContact.emailAddress!)"
         return cell
     }
-    */
+   */
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView .dequeueReusableCellWithIdentifier("Cell2", forIndexPath: indexPath) as! CustomCellTableViewCell
-        let currentContact = contactArray[indexPath.row]
-        cell.nameLabel.text = "\(currentContact.lastName!), \(currentContact.firstName!) "
+        let sectionArray = filterArrayForSection(contactArray, section: indexPath.section)
+        let currentContact = sectionArray[indexPath.row]
+        //cell.nameLabel.text = "\(currentContact.lastName), \(currentContact.firstName)"
+        
+        if let firstName = currentContact.firstName {
+        if let lastName = currentContact.lastName {
+            cell.nameLabel.text = "\(lastName), \(firstName)"
+            }
+        }
+        
         if let email = currentContact.emailAddress {
             cell.emailLabel.text = email
         } else {
@@ -99,50 +116,40 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         } else {
             cell.phoneLabel.text = ""
         }
+        
         return cell
     }
+
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 100.0
     }
     
     func refreshTableData() {
-        self.fetchEntries()
+        contactArray = self.fetchEntries()!
+        print("Count : \(contactArray.count)")
+        indexArray = createIndexfromArray(contactArray)
+        print(indexArray)
         contactTableView.reloadData()
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return indexArray[section]
+        
+    }
+    
+    func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
+        return indexArray
+    }
+    
+    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+        let sectionArray = filterArrayForSection(contactArray, section: section)
+        return "Count: \(sectionArray.count)"
     }
     
     //MARK: - Core Data Methods
     
-    func tempAddRecords() {
-        let entityDescription = NSEntityDescription.entityForName("Contact", inManagedObjectContext: managedObjectContext)!
-        
-        let newcontact1 = Contact(entity: entityDescription, insertIntoManagedObjectContext: managedObjectContext)
-        newcontact1.lastName = "Crowder"
-        newcontact1.firstName = "Geoff"
-        newcontact1.emailAddress = "Gcrowds@gmail.com"
-        newcontact1.streetAddress = "1001 Woodward Ave"
-        newcontact1.cityAddress = "Detroit"
-        newcontact1.stateAddress = "MI"
-        newcontact1.zipAddress = "48304"
-        newcontact1.phoneNumber = "2488774949"
-        newcontact1.rating = 3
-        newcontact1.contactIdentifer = ""
-        
-        let newcontact2 = Contact(entity: entityDescription, insertIntoManagedObjectContext: managedObjectContext)
-        newcontact2.lastName = "Zeffer"
-        newcontact2.firstName = "Phil"
-        newcontact2.emailAddress = "Phil@theZeff.com"
-        newcontact2.streetAddress = "4753 California"
-        newcontact2.cityAddress = "Santa Ana"
-        newcontact2.stateAddress = "CA"
-        newcontact2.zipAddress = "77777"
-        newcontact2.phoneNumber = "6785551234"
-        newcontact2.rating = 7
-        newcontact2.contactIdentifer = ""
-        
-        appDelegate.saveContext()
-    }
-    
+
     func fetchEntries() -> [Contact]? {
         let fetchRequest = NSFetchRequest(entityName: "Contact")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "lastName", ascending: true)]
@@ -154,6 +161,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
 
+    private func filterArrayForSection(array: [Contact], section: Int) -> [Contact] {
+        let sectionHeader = indexArray[section]
+        return array.filter {String($0.lastName![$0.lastName!.startIndex.advancedBy(0)]) == sectionHeader}
+    }
+
+    
+    private func createIndexfromArray(array: [Contact]) -> [String] {
+        let letterArray = array.map {String($0.lastName![$0.lastName!.startIndex.advancedBy(0)])}
+        var uniqueArray = Array(Set(letterArray))
+        uniqueArray.sortInPlace()
+        return uniqueArray
+    }
+    
     //MARK: - Contact Access Verification methods
     
     private func requestAccessToContactType(type: CNEntityType) {
@@ -185,13 +205,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         //tempAddRecords()
         checkContactAuthorizationStatus(.Contacts)
+        
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        contactArray = fetchEntries()!
-        print("Count : \(contactArray.count)")
         self.refreshTableData()
+
     }
     
     override func didReceiveMemoryWarning() {
