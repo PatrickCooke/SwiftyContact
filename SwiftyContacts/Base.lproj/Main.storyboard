@@ -100,6 +100,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="7si-WV-Zdd">
+                        <barButtonItem key="leftBarButtonItem" title="Sort" id="iWz-Zd-tez">
+                            <connections>
+                                <action selector="switchSortMethod" destination="BYZ-38-t0r" id="2Nk-D0-bDX"/>
+                            </connections>
+                        </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="uDv-1y-Sc6">
                                 <connections>
