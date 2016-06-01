@@ -11,7 +11,7 @@ import CoreData
 import Contacts
 import ContactsUI
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate { //CNContactPickerDelegate, CNContactViewControllerDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CNContactPickerDelegate, CNContactViewControllerDelegate {
 
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
@@ -22,6 +22,40 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var indexArray = [String]()
     var sortOrder = true
 
+    
+    //MARK: - ContactPicker Methods
+    
+    @IBAction private func showContactList(sender: UIBarButtonItem){
+        print("Show Contact List")
+        let contactListVC = CNContactPickerViewController()
+        contactListVC.delegate = self
+        presentViewController(contactListVC, animated: true, completion: nil)
+    }
+    
+    func contactPicker(picker: CNContactPickerViewController, didSelectContact contact: CNContact) {
+        let entityDescription = NSEntityDescription.entityForName("Contact", inManagedObjectContext: managedObjectContext)!
+        let newlistcontact = Contact(entity: entityDescription, insertIntoManagedObjectContext: managedObjectContext)
+        newlistcontact.lastName = contact.familyName
+        newlistcontact.firstName = contact.givenName
+        if let email = contact.emailAddresses.first?.value as? String {
+            newlistcontact.emailAddress = email
+        }
+        if let address = contact.postalAddresses.first {
+            let addressValue = address.value as! CNPostalAddress
+            newlistcontact.streetAddress = addressValue.street
+            newlistcontact.cityAddress = addressValue.city
+            newlistcontact.stateAddress = addressValue.state
+            newlistcontact.zipAddress = addressValue.postalCode
+        }
+        if let phone = contact.phoneNumbers.first?.value as? CNPhoneNumber {
+            newlistcontact.phoneNumber = phone.stringValue
+        }
+        
+        
+        newlistcontact.rating = 0
+        newlistcontact.contactIdentifer = contact.identifier
+        appDelegate.saveContext()
+    }
     
     //MARK: - Interactivty Methods
     
